@@ -78,4 +78,9 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    public function loginUsername()
+    {
+        return property_exists($this, 'username') ? $this->username : 'username';
+    }
 }
