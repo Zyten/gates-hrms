@@ -1,27 +1,74 @@
-# Laravel PHP Framework
+# Gates HRMS CRUD Demo
+:office: GATES Assessment 2 (1 Day Hackathon with specified UC for a Human Resource Management System)
+***
+### Synopsis
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+Simple mini-project with Laravel 5.2 built as the final assessment for my internship at GATES.
+It is basically a CRUD app that meets the minimal use case for a Human Resource Management System
+specified by the representative from MDEC with some fluff here and there to make it more interesting.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+### How to use
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+There are actually two different (and decoupled) projects in this repository.
+A placeholder portal site and the backend HRMS system. The portal site is merely 
+a static template that was added to allow me to play around with subdomain routing.
+Nevertheless, each of them live in their own Views and Controllers folder while having access to shared resources like Auth etc.
 
-## Official Documentation
+To get started, you need to do some preliminary setup first to allow the subdomain routing to work locally.
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+**Step 1. Append this to your hosts file**
 
-## Contributing
+    127.0.0.1 hrms.gates.localhost gates.localhost
+    
+**Step 2. Add these to your Apache2 Virtual Hosts Configuration**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+```xml
+<Directory path-to-www/gates-hrms>
+  Options Indexes FollowSymLinks
+  AllowOverride All
+  Require all granted
+</Directory>
+<VirtualHost *:80>
+    DocumentRoot path-to-www/gates-hrms
+    ServerName hrms.gates.localhost
+    ServerAlias hrms.gates.localhost
+    ErrorLog "logs/hrms.gates.localhost-error.log"
+    CustomLog "logs/hrms.gates.localhost-access.log" common
+</VirtualHost>
+<VirtualHost *:80>
+    DocumentRoot path-to-www/gates-hrms
+    ServerName gates.localhost
+    ServerAlias gates.localhost
+    ErrorLog "logs/gates.localhost-error.log"
+    CustomLog "logs/gates.localhost-access.log" common
+</VirtualHost>
+```
 
-## Security Vulnerabilities
+>I replaced .dev with .localhost since Google has enabled HSTS for the .dev TLD (2018). I'd prefer .test but I've bound it with my [Hotel](https://github.com/typicode/hotel) instance but I couldn't get Laravel to recognise requests from the Hotel proxy. I'm probably missing something in terms of how Hotel is meant to work but Laravel router seems to still see the request as coming from localhost and returns 404 (PR welcome! :D)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+**Step 3. Business as usual**
 
-## License
+1. Clone the repository && CD into it
+2. Copy **.env.example** to **.env** and fill in your database credentials
+3. Run **composer install**
+4. Run **php artisan key:generate**
+5. ~~Run **php artisan migrate --seed**~~ Import **gates-hrms.sql**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+You can now access the site at ```hrms.gates.localhost``` in your browser
+
+**Available logins**
+
+| Username | Role        | Password |
+| -------- | ----------- |--------- |
+| RUBAN    | Supervisor  | password |
+| CHUA     | Staff       | password |
+| THARIQ   | Admin       | password |
+
+### Tools used
+
+- [Apache2](https://httpd.apache.org), [Laravel 5.2](https://laravel.com/docs/5.2) and [MySQL](https://www.mysql.com)
+- [TIBCO Jaspersoft Studio 6.2.0](https://community.jaspersoft.com/project/jaspersoft-studio/releases)
+
+### License
+
+![MIT license](https://img.shields.io/npm/l/express.svg)
