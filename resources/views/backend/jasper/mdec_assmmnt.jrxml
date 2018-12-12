@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2017-01-13T07:38:53 -->
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2018-12-12T08:10:54 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="mdec_assmmnt" pageWidth="595" pageHeight="842" columnWidth="469" leftMargin="70" rightMargin="56" topMargin="56" bottomMargin="56" uuid="13acf49e-4913-4d1b-bccc-113817ad15d1">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.topMargin" value="cm"/>
@@ -41,6 +41,9 @@ WHERE
 		</field>
 	</subDataset>
 	<parameter name="id" class="java.lang.String"/>
+	<parameter name="imagePath" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
 	us.id, sl.id as sl_id, us.full_name as name, us.position, us.department, sl.is_approved, sl.leave_from, 
@@ -118,7 +121,7 @@ Email: admin@gates.my]]></text>
 				</staticText>
 				<image scaleImage="FillFrame">
 					<reportElement x="2" y="2" width="200" height="40" uuid="8e5041e3-870c-403e-8825-d0f5b50da9b3"/>
-					<imageExpression><![CDATA["C:/xampp/htdocs/images/gates.png"]]></imageExpression>
+					<imageExpression><![CDATA[$P{imagePath}+"/gates.png"]]></imageExpression>
 				</image>
 				<staticText>
 					<reportElement x="205" y="0" width="259" height="30" forecolor="#FFFFFF" uuid="432fdd48-8f74-43bf-95ef-9b855450732e"/>

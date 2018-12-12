@@ -143,6 +143,7 @@ class LeaveController extends Controller
         $jasper = new JasperPHP();
         $filename = "mdec_assmmnt";
         $reportPath = "/views/backend/jasper";
+        $imagePath = resource_path().$reportPath;
 
         $resource_path = $reportPath . "/" . "$filename.jasper";
         $public_path = "generated/$filename";
@@ -152,7 +153,7 @@ class LeaveController extends Controller
             resource_path(). $resource_path,
             public_path()."/". $public_path,
             array("pdf"),
-            array('id' => $id),
+            array('id' => $id, 'imagePath' => $imagePath),
             $database
             )->execute();
 
