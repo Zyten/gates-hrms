@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2018-12-12T08:10:54 -->
+<!-- 2019-07-24T07:47:39 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="mdec_assmmnt" pageWidth="595" pageHeight="842" columnWidth="469" leftMargin="70" rightMargin="56" topMargin="56" bottomMargin="56" uuid="13acf49e-4913-4d1b-bccc-113817ad15d1">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.topMargin" value="cm"/>
@@ -8,6 +8,7 @@
 	<property name="com.jaspersoft.studio.unit.leftMargin" value="cm"/>
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="cm"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="gates-hrms"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
@@ -20,25 +21,20 @@
 	</style>
 	<subDataset name="Dataset1" uuid="117fac1e-7b1d-43d3-88f1-52aa4f188f23">
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="gates-hrms"/>
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<parameter name="id" class="java.lang.String"/>
 		<queryString>
 			<![CDATA[SELECT
-	sl.status, sl.approval_date, sl.approved_by
+	COALESCE(sl.status, 'Pending Approval'), COALESCE(sl.approval_date, 'N/A'), COALESCE(sl.approved_by, 'N/A')
 FROM
 	users us
 LEFT OUTER JOIN staff_leaves sl ON us.id = sl.user_id
 WHERE
 	sl.id =  $P{id}]]>
 		</queryString>
-		<field name="status" class="java.lang.String">
-			<fieldDescription><![CDATA[]]></fieldDescription>
-		</field>
-		<field name="approval_date" class="java.sql.Date">
-			<fieldDescription><![CDATA[]]></fieldDescription>
-		</field>
-		<field name="approved_by" class="java.lang.String">
-			<fieldDescription><![CDATA[]]></fieldDescription>
-		</field>
+		<field name="COALESCE(sl.status, &apos;Pending Approval&apos;)" class="java.lang.String"/>
+		<field name="COALESCE(sl.approval_date, &apos;N/A&apos;)" class="java.lang.String"/>
+		<field name="COALESCE(sl.approved_by, &apos;N/A&apos;)" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="id" class="java.lang.String"/>
 	<parameter name="imagePath" class="java.lang.String">
@@ -46,8 +42,10 @@ WHERE
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
-	us.id, sl.id as sl_id, us.full_name as name, us.position, us.department, sl.is_approved, sl.leave_from, 
-	sl.duration, sl.leave_to, sl.leave_type, sl.leave_reason as reason, sl.application_date, us.role, us.remaining_leaves, us.total_leaves, us.ic
+	us.id, sl.id as sl_id, us.full_name as name, us.position, us.department, sl.is_approved,
+	CONCAT(sl.duration, " day(s)") as duration,  
+	CONCAT("From ", DATE_FORMAT(sl.leave_from, "%d/%m/%Y"), " To ", DATE_FORMAT(sl.leave_to, "%d/%m/%Y")) as period, 
+	sl.leave_type, sl.leave_reason as reason, sl.application_date, us.role, us.remaining_leaves, us.total_leaves, us.ic
 FROM
 	users us
 LEFT OUTER JOIN staff_leaves sl ON us.id = sl.user_id
@@ -68,15 +66,8 @@ WHERE
 	<field name="is_approved" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="leave_from" class="java.sql.Date">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="duration" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="leave_to" class="java.sql.Date">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="duration" class="java.lang.String"/>
+	<field name="period" class="java.lang.String"/>
 	<field name="leave_type" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -109,7 +100,7 @@ WHERE
 				<staticText>
 					<reportElement x="122" y="49" width="221" height="73" forecolor="#FFFFFF" uuid="7aca9111-e759-438c-9a56-7b06bca1abc7"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
+						<font fontName="SansSerif" size="8"/>
 					</textElement>
 					<text><![CDATA[Lot 4, Kompleks Usahawan Teknologi MARA,
 Industrial Centre, Technovation Park UTM,
@@ -171,7 +162,7 @@ Email: admin@gates.my]]></text>
 			<textField>
 				<reportElement x="200" y="83" width="176" height="20" uuid="cfb657f8-ffbb-43f8-82fd-a7a2062e0af4"/>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{name}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="40" y="105" width="140" height="20" uuid="5fcdce46-748b-40d0-9e4e-577615b95428"/>
@@ -244,7 +235,7 @@ Email: admin@gates.my]]></text>
 			<textField>
 				<reportElement x="200" y="173" width="176" height="20" uuid="15d2313b-2504-4f1c-bbe7-5704c87a50dd"/>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{department} + $F{position}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{department} +" / " + $F{position}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="40" y="195" width="140" height="20" uuid="e7aae582-ef14-4444-9f45-8db945a6b43e"/>
@@ -271,30 +262,10 @@ Email: admin@gates.my]]></text>
 				<text><![CDATA[:]]></text>
 			</staticText>
 			<textField pattern="dd/MM/YYYY">
-				<reportElement x="228" y="242" width="52" height="20" uuid="d7ef8e63-5e7f-42f2-b44c-99cdbf132920"/>
+				<reportElement x="200" y="242" width="176" height="20" uuid="d7ef8e63-5e7f-42f2-b44c-99cdbf132920"/>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{leave_from}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{period}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="200" y="242" width="28" height="20" uuid="faa36c2b-1971-47d6-9bbb-b544eaaf3403"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[From]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="283" y="242" width="22" height="20" uuid="07233314-c57f-4a52-ad63-d92e1746996b"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[To]]></text>
-			</staticText>
-			<textField pattern="dd/MM/YYYY">
-				<reportElement x="301" y="242" width="59" height="20" uuid="f76bac08-5d72-4f78-b874-2e604ea40a89"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{leave_to}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="233" y="218" width="56" height="20" uuid="08269137-40ef-4561-a3df-e0a21a4dcd44"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<text><![CDATA[day(s)]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="200" y="288" width="176" height="75" uuid="c39d25ee-13d0-4d6c-ab44-db9a097e6ee8"/>
 				<textElement verticalAlignment="Middle"/>
@@ -308,7 +279,7 @@ Email: admin@gates.my]]></text>
 				<text><![CDATA[:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="200" y="265" width="176" height="20" uuid="3f67e8a1-4b37-41a2-9254-4a3a8aa4ed96"/>
+				<reportElement x="200" y="266" width="176" height="20" uuid="3f67e8a1-4b37-41a2-9254-4a3a8aa4ed96"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{remaining_leaves}]]></textFieldExpression>
 			</textField>
@@ -322,7 +293,7 @@ Email: admin@gates.my]]></text>
 			<staticText>
 				<reportElement x="40" y="265" width="140" height="20" uuid="dbd34957-be30-459a-8371-6eee249694b8"/>
 				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Available Leave]]></text>
+				<text><![CDATA[Available Leaves]]></text>
 			</staticText>
 			<frame>
 				<reportElement mode="Opaque" x="0" y="376" width="465" height="24" forecolor="#B89F7D" backcolor="#000000" uuid="342c4a4c-9fee-440f-85f8-20fb234caa39"/>
@@ -338,7 +309,7 @@ Email: admin@gates.my]]></text>
 			<frame>
 				<reportElement mode="Opaque" x="0" y="1" width="466" height="32" forecolor="#000000" backcolor="#CC0000" uuid="e3c14156-5b51-4201-918b-97fdc012e5d4"/>
 				<textField pattern="dd/MM/YYYY">
-					<reportElement x="360" y="11" width="103" height="20" forecolor="#FFFFFF" uuid="5c3301e7-a737-4c59-8a2f-a6c79fd1adb8"/>
+					<reportElement x="363" y="0" width="103" height="32" forecolor="#FFFFFF" uuid="5c3301e7-a737-4c59-8a2f-a6c79fd1adb8"/>
 					<box rightPadding="5"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="10"/>
@@ -349,7 +320,7 @@ Email: admin@gates.my]]></text>
 					<reportElement style="SubTitle" x="2" y="3" width="264" height="29" forecolor="#FFFFFF" uuid="8978eac3-c578-41c9-837e-48d2b0184642"/>
 					<box leftPadding="5"/>
 					<textElement>
-						<font size="18" isBold="false"/>
+						<font fontName="Times New Roman" size="18" isBold="false"/>
 					</textElement>
 					<text><![CDATA[Leave Application]]></text>
 				</staticText>
@@ -363,7 +334,7 @@ Email: admin@gates.my]]></text>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["This letter is computer-generated. No signature required"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["This document is computer-generated. No signature is required"]]></textFieldExpression>
 			</textField>
 			<componentElement>
 				<reportElement x="40" y="414" width="340" height="67" isRemoveLineWhenBlank="true" uuid="32bef996-49f3-45b6-9a98-3142d72008b2"/>
@@ -404,24 +375,27 @@ Email: admin@gates.my]]></text>
 						<staticText>
 							<reportElement x="2" y="23" width="140" height="20" uuid="f4a43d47-6962-47bd-88f8-09ca22e5555a"/>
 							<textElement verticalAlignment="Middle"/>
-							<text><![CDATA[Verify Date]]></text>
+							<text><![CDATA[Verified On]]></text>
 						</staticText>
 						<staticText>
 							<reportElement x="2" y="47" width="140" height="20" uuid="76d7556d-01b8-4508-9e5c-dc988bfee762"/>
 							<textElement verticalAlignment="Middle"/>
-							<text><![CDATA[Verify By]]></text>
+							<text><![CDATA[Verified By]]></text>
 						</staticText>
-						<textField>
+						<textField pattern="">
 							<reportElement x="162" y="0" width="176" height="20" isRemoveLineWhenBlank="true" uuid="28dc7105-e313-49c2-9892-b27784db9903"/>
-							<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+							<textElement verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{COALESCE(sl.status, 'Pending Approval')}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="162" y="23" width="178" height="20" isRemoveLineWhenBlank="true" uuid="2c035377-8015-4e92-ba25-ac7f85c2131d"/>
-							<textFieldExpression><![CDATA[$F{approval_date}]]></textFieldExpression>
+							<textElement verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{COALESCE(sl.approval_date, 'N/A')}]]></textFieldExpression>
 						</textField>
 						<textField>
 							<reportElement x="162" y="47" width="176" height="20" uuid="cf2a0a6b-304d-41be-ad9c-17b5c458be2a"/>
-							<textFieldExpression><![CDATA[$F{approved_by}]]></textFieldExpression>
+							<textElement verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{COALESCE(sl.approved_by, 'N/A')}]]></textFieldExpression>
 						</textField>
 					</jr:listContents>
 				</jr:list>
@@ -440,7 +414,8 @@ Email: admin@gates.my]]></text>
 				<textFieldExpression><![CDATA[$F{reason}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="199" y="222" width="31" height="17" uuid="4ce7babb-7019-4c49-9fc0-f11fdc9f1695"/>
+				<reportElement x="200" y="218" width="50" height="20" uuid="4ce7babb-7019-4c49-9fc0-f11fdc9f1695"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{duration}]]></textFieldExpression>
 			</textField>
 		</band>

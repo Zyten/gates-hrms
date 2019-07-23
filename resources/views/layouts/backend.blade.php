@@ -20,12 +20,14 @@
 
                 @yield('content')
 
+                @include('backend.sidebar')
+
                 @include('backend.footer')
             </div>
         </div>
 
-       
         @include('backend.footerscript')
+        @yield('scripts')
     </body>
 
 </html>

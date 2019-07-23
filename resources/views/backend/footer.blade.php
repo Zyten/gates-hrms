@@ -2,7 +2,7 @@
 <footer class="footer">
 	<div class="footer-block author">
 		<ul>
-		<li> Made with love by <a href="https://github.com/Zyten">Ruban Selvarajah</a> </li>
+		<li> Made with love by <a href="https://zyten.github.io">Ruban Selvarajah</a> </li>
 		</ul>
 	</div>
 </footer>

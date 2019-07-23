@@ -44,12 +44,12 @@ To get started, you need to do some preliminary setup first to allow the subdoma
 </VirtualHost>
 ```
 
->I replaced .dev with .localhost since Google has enabled HSTS for the .dev TLD (2018). I'd prefer .test but I've bound it with my [Hotel](https://github.com/typicode/hotel) instance but I couldn't get Laravel to recognise requests from the Hotel proxy. I'm probably missing something in terms of how Hotel is meant to work but Laravel router seems to still see the request as coming from localhost and returns 404 (PR welcome! :D)
+>I replaced .dev with .localhost since Google has enabled HSTS for the .dev TLD (2018). I'd prefer .test since I've bound it with my [Hotel](https://github.com/typicode/hotel) instance but I couldn't get Laravel to recognise requests from the Hotel proxy. I'm probably missing something in terms of how Hotel is meant to work but Laravel router seems to still see the request as coming from localhost and returns 404 (PR welcome! :D)
 
 **Step 3. Business as usual**
 
 1. Clone the repository && CD into it
-2. Copy **.env.example** to **.env** and fill in your database credentials
+2. Rename **.env.example** to **.env** and fill in your database credentials
 3. Run **composer install**
 4. Run **php artisan key:generate**
 5. ~~Run **php artisan migrate --seed**~~ Import **gates-hrms.sql**
@@ -60,9 +60,9 @@ You can now access the site at ```hrms.gates.localhost``` in your browser
 
 | Username | Role        | Password |
 | -------- | ----------- |--------- |
-| RUBAN    | Supervisor  | password |
 | CHUA     | Staff       | password |
-| THARIQ   | Admin       | password |
+| THARIQ   | Supervisor  | password |
+| RUBAN    | Admin       | password |
 
 ### Tools used
 

@@ -8,13 +8,13 @@
 
 		//My Leaves
 		Route::get('leave/list', 'LeaveController@index')->name('backend.leave.list');
-		Route::get('leave/{id}', 'LeaveController@show');
+		Route::get('leave/{id}', 'LeaveController@show')->name('backend.leave.show');;
 		Route::post('leave/{id}/generate', 'LeaveController@generate')->name('backend.leave.generate');
 		Route::get('leave/{id}/generate', 'LeaveController@generate')->name('backend.leave.generate');
 
 	});
 
-	Route::group(['middleware' => 'admin'], function () {
+	Route::group(['middleware' => 'supervisor'], function () {
 		//Pending Apllications
 		Route::get('application/list', 'ApplicationController@index')->name('backend.application.list');
 		Route::get('application/{id}', 'ApplicationController@show')->name('backend.application.details');

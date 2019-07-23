@@ -12,7 +12,7 @@
         {{ csrf_field() }}
         <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
             <label for="username">Username</label> 
-            <input type="text" class="form-control underlined" name="username" id="username" placeholder="Your username" value="{{ old('username') }}" required/> 
+            <input type="text" class="form-control underlined" name="username" id="username" placeholder="Your username" value="{{ old('username') }}" required oninput="this.value = this.value.toUpperCase()"/>
             
             @if ($errors->has('username'))
                 <span class="help-block">

@@ -10,12 +10,15 @@ use Redirect;
 use Carbon;
 use JasperPHP;
 use Auth;
+use File;
+use Exception;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\StaffLeave;
+use App\Models\User;
 use App\Models\LeaveType;
+use App\Models\StaffLeave;
 
 class LeaveController extends Controller
 {
@@ -139,15 +142,24 @@ class LeaveController extends Controller
      */
     public function generate($id)
     {
+        $staffLeave = StaffLeave::find($id);
+        $staff = User::find($staffLeave->user_id);
+
         $database = \Config::get('database.connections.generic');
         $jasper = new JasperPHP();
-        $filename = "mdec_assmmnt";
+        $filename = Carbon::parse($staffLeave->application_date)->format("Ymd")."-"
+            .$staff->department."-"
+            .ucwords(strtolower($staff->username));
         $reportPath = "/views/backend/jasper";
+        $reportName = "leave_application";
         $imagePath = resource_path().$reportPath;
 
-        $resource_path = $reportPath . "/" . "$filename.jasper";
+        $resource_path = $reportPath . "/" . "$reportName.jasper";
         $public_path = "generated/$filename";
         $pdf = "generated/$filename.pdf";
+
+        if (file_exists(public_path($pdf)))
+            File::delete(public_path($pdf));
 
         \JasperPHP::process(
             resource_path(). $resource_path,
@@ -156,6 +168,17 @@ class LeaveController extends Controller
             array('id' => $id, 'imagePath' => $imagePath),
             $database
             )->execute();
+
+        $timer = 0;
+        while (! file_exists(public_path($pdf)) && $timer < 30) {
+            sleep(1); $timer++;
+            if (file_exists(public_path($pdf))) {
+                break;
+            }
+        }
+
+        if (! file_exists(public_path($pdf)))
+            throw new Exception("Failed to generate leave application report within 30 seconds");
 
         return \View::make('report_index',
             array('report_title'=> 'Leave Application', 'pdf' => $pdf,'flag' => 'pdf'));
