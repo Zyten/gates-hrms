@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(['domain' => 'hrms.gates.localhost'], function () {
+// Route::group(['domain' => 'hrms.gates.localhost'], function () {
 
     Route::group(['namespace' => 'Auth'], function () {
         require (__DIR__ . '/Routes/Frontend/AuthRoutes.php');
@@ -30,7 +30,7 @@ Route::group(['domain' => 'hrms.gates.localhost'], function () {
         }
 
     });
-});
+// });
 
 Route::group(['domain' => 'gates.localhost'], function() {
     /**
