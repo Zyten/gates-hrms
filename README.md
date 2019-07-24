@@ -3,11 +3,12 @@
 ***
 ### Synopsis
 
-Simple mini-project with Laravel 5.2 built as the final assessment for my internship at GATES.
+Simple mini-project with Laravel 5.2 built during the final assessment for my internship at GATES.
 It is basically a CRUD app that meets the minimal use case for a Human Resource Management System
 specified by the representative from MDEC with some fluff here and there to make it more interesting.
 
 ### How to use
+><small>See [DEV-LINUX.md](DEV-LINUX.md) for the self-reminder notes I made when testing this on my Linux box.</small>
 
 There are actually two different (and decoupled) projects in this repository.
 A placeholder portal site and the backend HRMS system. The portal site is merely 
@@ -19,7 +20,7 @@ To get started, you need to do some preliminary setup first to allow the subdoma
 **Step 1. Append this to your hosts file**
 
     127.0.0.1 hrms.gates.localhost gates.localhost
-    
+
 **Step 2. Add these to your Apache2 Virtual Hosts Configuration**
 
 ```xml
@@ -68,6 +69,10 @@ You can now access the site at ```hrms.gates.localhost``` in your browser
 
 - [Apache2](https://httpd.apache.org), [Laravel 5.2](https://laravel.com/docs/5.2) and [MySQL](https://www.mysql.com)
 - [TIBCO Jaspersoft Studio 6.2.0](https://community.jaspersoft.com/project/jaspersoft-studio/releases)
+
+### Notes
+
+The [JasperReports plugin](https://github.com/cossou/JasperPHP) requires Java JDK 1.6 and PHP exec() function.
 
 ### License
 
