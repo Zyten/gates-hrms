@@ -7,6 +7,8 @@ Simple mini-project with Laravel 5.2 built during the final assessment for my in
 It is basically a CRUD app that meets the minimal use case for a Human Resource Management System
 specified by the representative from MDEC with some fluff here and there to make it more interesting.
 
+###### Project Page: [sruban.me/gates-hrms](http://sruban.me/gates-hrms)
+
 ### How to use
 ><small>See [DEV-LINUX.md](DEV-LINUX.md) for the self-reminder notes I made when testing this on my Linux box.</small>
 
@@ -72,7 +74,9 @@ You can now access the site at ```hrms.gates.localhost``` in your browser
 
 ### Notes
 
-The [JasperReports plugin](https://github.com/cossou/JasperPHP) requires Java JDK 1.6 and PHP exec() function.
+- The [JasperReports plugin](https://github.com/cossou/JasperPHP) requires Java JDK 1.6 and PHP exec() function.
+- The project is deployed using [Heroku](https://www.heroku.com/free).
+><small>See [DEV-HEROKU.md](DEV-HEROKU.md) for the self-reminder notes I made when setting it up at Heroku.</small>
 
 ### License
 
