@@ -88,9 +88,7 @@ The folder is inaccessible when I boot Windows though. (ಥ﹏ಥ)
   GRANT ALL ON `gates-hrms`.* TO 'gates-hrms'@'localhost';
   FLUSH PRIVILEGES;
   ```
-  <small> 
-  Alternatively, import using bash ``mysql gates-hrms < gates-hrms-20181212.sql``
-  </small>
+  <small>Alternatively, import using bash ``mysql gates-hrms < gates-hrms-20181212.sql``</small>
 
 **Step 6 Prep for Jasper**
 
