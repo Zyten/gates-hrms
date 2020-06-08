@@ -39,7 +39,7 @@
 </VirtualHost>
 ```
 4. Save and exit
-5. ``a2ensite performa.conf``
+5. ``a2ensite gates.conf``
 
 **Step 3. Prep serve folder for Apache**
 
